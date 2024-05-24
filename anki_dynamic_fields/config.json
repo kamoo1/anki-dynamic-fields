@@ -1,0 +1,14 @@
+{
+    "logging_level": "INFO",
+    "template_path": "~/.config/anki-dynamic-fields/templates",
+    "extension_path": "~/.config/anki-dynamic-fields/extensions",
+    "extensions": [
+        {
+            "repo": "https://github.com/kamoo1/adf-gpt-api",
+            "tag": "latest",
+            "config": {
+                "OPENAI_API_KEY": "YOUR_API_KEY_HERE"
+            }
+        }
+    ]
+}
