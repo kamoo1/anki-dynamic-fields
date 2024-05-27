@@ -24,3 +24,4 @@ else:
     basicConfig(level=config.get("log_level", "INFO"))
     AnkiDynamicFields(config=config)
     gui_hooks.card_will_show.append(AnkiDynamicFields.on_card_will_show)
+    gui_hooks.editor_did_init_buttons.append(AnkiDynamicFields.on_setup_editor_buttons)

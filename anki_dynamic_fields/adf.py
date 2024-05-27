@@ -9,6 +9,7 @@ from . import IS_DEBUG
 
 if not IS_DEBUG:
     from anki.cards import Card
+    from aqt.qt import QIcon
 
 
 class AnkiDynamicFields:
@@ -28,6 +29,7 @@ class AnkiDynamicFields:
         self.logger.debug(f"Exports:\n{s_exports}")
 
     def render(self, text: str):
+        # TODO: add context to render, e.g. fields
         try:
             return self.env.from_string(text).render()
         except Exception as e:
@@ -36,5 +38,22 @@ class AnkiDynamicFields:
                 self.logger.exception(e)
             return text
 
+    def on_render_editor(self, editor):
+        notes = editor.note
+        for field in notes.keys():
+            self.logger.debug(notes[field])
+        
+        editor.saveNow()
+
     def on_card_will_show(self, text: str, card: "Card", kind: str) -> str:
         return self.render(text)
+
+    def on_setup_editor_buttons(self, buttons, editor):
+        button = editor.addButton(
+            # QIcon(":/icons/anki-dynamic-fields.svg"),
+            "",
+            "anki_dynamic_fields",
+            self.on_render_editor,
+            tip="render dynamic fields",
+        )
+        buttons.append(button)

@@ -4,50 +4,28 @@ from logging import getLogger
 from typing import Any, Dict, Callable
 import importlib.util
 
-# class ExtensionConfig:
-#     NAME_REGEX = r"^[a-z0-9_]+$"
+from .utils import ensure_path
 
-#     def __init__(
-#         self,
-#         path: str,
-#         name: str,
-#         description: str,
-#     ) -> None:
-#         self.path = path
-#         self.name = name
-#         self.description = description
+# TODO: implement this
+def get_module_config(name):
+    # get extension config if any
+    pass
 
-#         if not isinstance(self.path, str):
-#             raise TypeError("path must be a string")
 
-#         if not os.path.exists(self.path):
-#             raise FileNotFoundError(f"Path not found: {self.path}")
+def get_module_context():
+    # return adf versions
+    pass
 
-#         if not isinstance(self.name, str):
-#             raise TypeError("name must be a string")
-#         if not self.name:
-#             raise ValueError("name cannot be empty")
-#         if not re.match(self.NAME_REGEX, self.name):
-#             raise ValueError("name must match regex: {self.NAME_REGEX}")
-
-#         if not isinstance(self.description, str):
-#             raise TypeError("description must be a string")
-#         if not self.description:
-#             raise ValueError("description cannot be empty")
-
-#     @classmethod
-#     def from_dict(cls, data: dict) -> "ExtensionConfig":
-#         return cls(
-#             path=data["path"],
-#             name=data["name"],
-#             description=data["description"],
-#         )
 
 def load_module(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
+    if "init" in module.__dict__:
+        ...
+        module.init()
     return module
+
 
 class Extension:
     def __init__(self, base_path, module_name) -> None:
@@ -65,9 +43,12 @@ class Extension:
 
         return mapping
 
+
 class ExtensionManager:
     logger = getLogger("ExtensionManager")
+
     def __init__(self, base_path: str) -> None:
+        ensure_path(base_path)
         sys.path += [os.path.abspath(base_path)]
         self.base_path = base_path
         self.extensions = self._load_all()
@@ -92,5 +73,5 @@ class ExtensionManager:
         for ext in self.extensions.values():
             for name, func in ext.get_exports().items():
                 exports[name] = func
-        
+
         return exports

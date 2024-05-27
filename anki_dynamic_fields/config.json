@@ -1,5 +1,6 @@
 {
     "logging_level": "INFO",
+    "render_on_card_view": true,
     "template_path": "~/.config/anki-dynamic-fields/templates",
     "extension_path": "~/.config/anki-dynamic-fields/extensions",
     "extensions": [
