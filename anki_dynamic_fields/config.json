@@ -1,6 +1,6 @@
 {
-    "logging_level": "INFO",
-    "render_on_card_view": true,
+    "auto_render_card": true,
+    "match_render_field": "Front|Back",
     "template_path": "~/.config/anki-dynamic-fields/templates",
     "extension_path": "~/.config/anki-dynamic-fields/extensions",
     "extensions": [
